@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;800&display=swap" rel="stylesheet">
+  <title>Advice generator app</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+
+  body {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    background-color: hsl(218, 23%, 16%);
+    box-sizing: border-box;
+    font-family: 'Manrope', sans-serif;
+  }
+  .container {
+    max-width: calc(100% - 2rem);
+    text-align: center;
+    background-color: hsl(217, 19%, 24%);
+    position: relative;
+    border-radius: 10px;
+  }
+  .adviceNum {
+    color: hsl(150, 100%, 66%);
+    text-transform: uppercase;
+    letter-spacing: .3rem;
+    font-size: .8rem;
+  }
+  .advice {
+    color: hsl(217, 17%, 76%);
+    padding: 1em;
+    font-size: 1.75rem;
+    font-weight: 800;
+  }
+  .inner-class {
+    padding: 3em 1em 4em;
+  }
+  .btn {
+    background-color: hsl(150, 100%, 66%);
+    border-radius: 50%;
+    border: none;
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto;
+    width: 4rem;
+    height: 4rem;
+    bottom: -2em;
+    transition: 600ms;
+    cursor: pointer;
+  }
+  .btn:hover {
+    box-shadow: 0 0 1rem 1rem rgba(82, 255, 169, 0.205);
+
+  }
+  .btn::after {
+    content: url(images/icon-dice.svg);
+  }
+  @media(min-width: 40rem) {
+    .mobile {
+      display: none;
+    }
+    .container {
+      max-width: 50%;
+    }
+  }
+  @media(max-width: 40rem) {
+    .desktop {
+      display: none;
+    }
+  }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="inner-class">
+      <div id="adviceNum" class="adviceNum">Advice</div>
+      <h1 id="advice" class="advice">Click the dice to get advice!</h1>
+      <div class="mobile"><img src="images/pattern-divider-mobile.svg" alt=""></div>
+      <div class="desktop"><img src="images/pattern-divider-desktop.svg" alt=""></div>
+    </div>
+      <button class="btn"></button>
+  </div>
+</body>
+<script>
+  const adviceNum = document.getElementById('adviceNum')
+  const advice = document.getElementById('advice')
+  const btn = document.querySelector('.btn')
+
+  btn.addEventListener('click', ()=> {
+    async function getAdvice() {
+    let res = await fetch('https://api.adviceslip.com/advice')
+    let data = await res.json()
+    return data
+  }
+    getAdvice().then(data => {
+      adviceNum.textContent = `Advice # ${data.slip.id}`
+      advice.innerHTML = `"${data.slip.advice}"`
+  })
+})
+  
+</script>
+</html>
+<!-- https://api.adviceslip.com/advice -->
